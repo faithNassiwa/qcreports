@@ -1,0 +1,5 @@
+Django==1.10.6
+pytz==2017.2
+-e git+https://github.com/rapidpro/rapidpro-python.git@324230070cace6056a04bbc7e7089f5f44dd63da#egg=rapidpro_python
+requests==2.13.0
+six==1.10.0
