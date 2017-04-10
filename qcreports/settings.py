@@ -122,5 +122,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-HOST = ""
-KEY = ""
+HOST = "https://hiwa.tmcg.co.ug"
+KEY = "12e20adece1e7cc0a2cd18c5d76a07cda0994bf3"
+
+#HOST = "http://0.0.0.0:8000"
+#KEY = "bf05b45642d174a0ad2ff4e340f2eb494f86c102"

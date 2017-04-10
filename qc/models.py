@@ -5,6 +5,7 @@ from temba_client.v2 import TembaClient
 
 # Create your models here.
 class Contact(models.Model):
+    id = models.IntegerField(primary_key=True)
     uuid = models.CharField(max_length=200)
     name = models.CharField(max_length=200, null=True)
     language = models.CharField(max_length=200, null=True)
@@ -13,7 +14,7 @@ class Contact(models.Model):
     fields = models.CharField(max_length=200)
     blocked = models.BooleanField(default=False)
     stopped = models.BooleanField(default=False)
-    created_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(null=True)
 
     def __str__(self):
@@ -50,7 +51,7 @@ class Message(models.Model):
     visibility = models.CharField(max_length=200)
     text = models.CharField(max_length=1000)
     labels = models.CharField(max_length=200)
-    created_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True, editable=False)
     sent_on = models.DateTimeField(null=True)
     modified_on = models.DateTimeField(null=True)
 
@@ -58,9 +59,9 @@ class Message(models.Model):
         return self.id
 
     @classmethod
-    def save_messages(cls):
+    def save_messages(cls, msg_folder='Inbox'):
         client = TembaClient(settings.HOST, settings.KEY)
-        messages = client.get_messages(folder='Inbox').all()
+        messages = client.get_messages(folder=msg_folder).all()
         added = 0
         for message in messages:
             if not cls.message_exists(message):

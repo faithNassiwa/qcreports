@@ -1,0 +1,27 @@
+<html>
+<head>
+    <title>QC</title>
+</head>
+<body>
+<h2>
+    Contacts
+</h2>
+<table>
+    <thead><tr><td>contact id</td><td>contact urns</td></tr></thead>
+    {% for contact in contacts %}
+        <tr><td>{{ contact.id }}</td><td>{{ contact.urns }}</td></tr>
+    {% endfor %}
+</table>
+<h2>
+    Messages
+</h2>
+<hr>
+<table>
+    <thead><tr><td>Id</td><td>Contact</td></tr></thead>
+    {% for message in messages %}
+        <tr><td>{{ message.id }}</td><td>{{ message.contact.urns }}</td></tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

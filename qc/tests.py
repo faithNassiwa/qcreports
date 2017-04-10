@@ -16,8 +16,9 @@ class TestContact(TestCase):
 
     def test_contact_exists(self):
         class C(object):
-            def __init__(self, uuid=None, name=None, language=None, urns=None,
+            def __init__(self, id=None, uuid=None, name=None, language=None, urns=None,
                          groups=None, fields=None, blocked=None, stopped=None, created_on=None, modified_on=None):
+                self.id = id
                 self.uuid = uuid
                 self.name = name
                 self.language = language
@@ -66,12 +67,12 @@ class TestMessage(TestCase):
                 self.created_on = created_on
                 self.modified_on = modified_on
 
-        qc_mock_message = M(id=1, broadcast=1, contact="contact-test", urn="urn-test", channel="channel-test",
+        qc_mock_message = M(id=1, broadcast=1, contact='contact-test', urn="urn-test", channel="channel-test",
                             direction="direction-test", type="type-test", status="status-test",
                             visibility="visibility-test", text="text-test", labels="labels-test", created_on=None,
                             sent_on=None, modified_on=None)
         self.assertEquals(Message.message_exists(qc_mock_message), False)
-        Message.objects.create(id=1, broadcast=1, contact="contact-test", urn="urn-test", channel="channel-test",
+        Message.objects.create(id=1, broadcast=1, contact='contact-test', urn="urn-test",channel="channel-test",
                                direction="direction-test", type="type-test", status="status-test",
                                visibility="visibility-test", text="text-test", labels="labels-test", created_on=None,
                                sent_on=None, modified_on=None)
