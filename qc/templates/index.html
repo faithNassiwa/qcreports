@@ -1,27 +1,35 @@
 <html>
 <head>
-    <title>QC</title>
+    <title>QC REPORTS</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-<h2>
-    Contacts
-</h2>
+<h2 style="text-align: center">CRAG mHealth Weekly Report</h2>
+<h3>Report Date: {{ this_day }}</h3>
+<h2>ENROLLED CONTACTS</h2>
+<h2>{{ target }}</h2>
 <table>
-    <thead><tr><td>contact id</td><td>contact urns</td></tr></thead>
+    <thead><tr><td>CONTACT</td><td>ENROLLED ON</td></tr></thead>
     {% for contact in contacts %}
-        <tr><td>{{ contact.id }}</td><td>{{ contact.urns }}</td></tr>
+        <tr><td>{{ contact.urns }}</td><td>{{ contact.created_on }}</td></tr>
     {% endfor %}
 </table>
-<h2>
-    Messages
-</h2>
-<hr>
+<h2>Total contacts enrolled = {{ contacts_count }}</h2>
+
+<h2>SENT MESSAGES</h2>
 <table>
-    <thead><tr><td>Id</td><td>Contact</td></tr></thead>
-    {% for message in messages %}
-        <tr><td>{{ message.id }}</td><td>{{ message.contact.urns }}</td></tr>
+    <thead><tr><td>CONTACT</td><td>MESSAGE</td></tr></thead>
+    {% for msg in sent_messages %}
+        <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td></tr>
     {% endfor %}
 </table>
+
+<h2>Total Messages Sent = {{ messages_count }}</h2>
+
 
 </body>
 </html>
