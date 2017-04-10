@@ -8,3 +8,4 @@ class Command(BaseCommand):
         for folder in folders:
             added = Message.save_messages(folder)
             self.stdout.write(self.style.SUCCESS('Successfully added %d %s messages' % (added, folder)))
+    
