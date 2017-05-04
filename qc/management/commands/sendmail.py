@@ -12,5 +12,5 @@ class Command(BaseCommand):
         html_to_pdf_view()
         this_day = now()
         target = 'media/'+str(this_day)[:-22]+'.pdf'
-        Email.send_message_email(target)
+        #Email.send_message_email(target)
         self.stdout.write(self.style.SUCCESS('Successfully sent Email'))

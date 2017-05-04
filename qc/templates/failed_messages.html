@@ -1,0 +1,53 @@
+{% load staticfiles %}
+<html>
+<head>
+     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="{%   static 'css/materialize.min.css' %}"  media="screen,projection"/>
+    <title>FAILED MESSAGES</title>
+    <style>
+        tr{
+            border-top: 1px #555 solid;
+        }
+    </style>
+</head>
+<body>
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">CRAG mHealth (mCRAG) Daily Report</a>
+        </div>
+    </div>
+</nav>
+
+<div class="card">
+    <div class="card-content" align="center">
+        <span class="card-title">CRAG mHealth Daily</span>
+        <p>
+            <p>Report Date:  {{ this_day }}</p><br />
+            <div class="container">
+                <nav class="|nav-extended">
+                    <div class="nav-wrapper">
+                        <div class="container">
+                            <a href="#" class="brand-logo center">FAILED MESSAGES</a>
+                        </div>
+                    </div>
+                </nav>
+                <table class="striped">
+                    <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>SENT ON</td></tr></thead>
+                    {% for msg in failed_messages_daily %}
+                        <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.sent_on }}</td></tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </p>
+    </div>
+</div>
+
+
+
+ <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .models import Contact, Message, Group
+import unittest
 
 
 class DumpTest(TestCase):
@@ -73,10 +74,12 @@ class TestContact(TestCase):
 #
 #     def test_message_exists(self):
 #         class M(object):
-#             def __init__(self, id=None, broadcast=None, contact=None, urn=None, channel=None, direction=None, type=None,
+#             def __init__(self, id=None, folder=None, broadcast=None, contact=None, urn=None, channel=None,
+#                   direction=None, type=None,
 #                          status=None, visibility=None, text=None, labels=None, created_on=None, sent_on=None,
 #                          modified_on=None):
 #                 self.id = id
+#                  self.folder = folder
 #                 self.broadcast = broadcast
 #                 self.contact = contact
 #                 self.urn = urn

@@ -1,35 +1,106 @@
+{% load staticfiles %}
 <html>
 <head>
+     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="{%   static 'css/materialize.min.css' %}"  media="screen,projection"/>
     <title>QC REPORTS</title>
     <style>
-        table, th, td {
-            border: 1px solid black;
+        tr{
+            border-top: 1px #555 solid;
         }
     </style>
 </head>
 <body>
-<h2 style="text-align: center">CRAG mHealth Weekly Report</h2>
-<h3>Report Date: {{ this_day }}</h3>
-<h2>ENROLLED CONTACTS</h2>
-<h2>{{ target }}</h2>
-<table>
-    <thead><tr><td>CONTACT</td><td>ENROLLED ON</td></tr></thead>
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">CRAG mHealth (mCRAG) Weekly Report</a>
+        </div>
+    </div>
+</nav>
+
+<div class="card">
+<div class="card-content" align="center">
+    <span class="card-title">CRAG mHealth Weekly Report</span>
+    <p>
+
+<p>Report Date: From  April 25, 2017 -  {{ this_day }}</p><br />
+
+<div class="container">
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">ENROLLED CONTACTS</a>
+        </div>
+    </div>
+</nav>
+<table class="striped">
+    <thead><tr><td>PHONE NUMBER</td><td>ENROLLED ON</td><td>LANGUAGE</td></tr></thead>
     {% for contact in contacts %}
-        <tr><td>{{ contact.urns }}</td><td>{{ contact.created_on }}</td></tr>
+        <tr><td>{{ contact.urns }}</td><td>{{ contact.created_on }}</td><td>{{ contact.language }}</td></tr>
     {% endfor %}
 </table>
-<h2>Total contacts enrolled = {{ contacts_count }}</h2>
+<h4>Total contacts enrolled = {{ contacts_count }}</h4>
+<br><br>
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">READ MESSAGES</a>
+        </div>
+    </div>
+</nav>
 
-<h2>SENT MESSAGES</h2>
-<table>
-    <thead><tr><td>CONTACT</td><td>MESSAGE</td></tr></thead>
-    {% for msg in sent_messages %}
-        <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td></tr>
+<table class="striped">
+    <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>SENT ON</td></tr></thead>
+    {% for msg in delivered_messages %}
+        <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td></tr>
     {% endfor %}
 </table>
 
-<h2>Total Messages Sent = {{ messages_count }}</h2>
+<h4>Total Messages Sent = {{ messages_count }}</h4>
+<h4>Total Messages Read = {{ read_messages_count }}</h4>
+<h4>Total Messages NOT Received = {{ unread_messages_count }}</h4>
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">UNREAD MESSAGES</a>
+        </div>
+    </div>
+</nav>
+
+    <table class="striped">
+        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>SENT ON</td></tr></thead>
+        {% for msg in unread_messages %}
+            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td></tr>
+        {% endfor %}
+    </table>
+<br>
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">FAILED MESSAGES</a>
+        </div>
+    </div>
+</nav>
+
+    <table class="striped">
+        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>SENT ON</td></tr></thead>
+        {% for msg in failed_messages %}
+            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td></tr>
+        {% endfor %}
+    </table>
+</div>
+    </p>
+</div>
+</div>
 
 
+
+ <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
 </body>
 </html>
