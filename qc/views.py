@@ -27,10 +27,10 @@ def sms_maama_weekly(request):
     # project_list = []
     # for report_group in report_groups:
     #     project_list.append(report_group.name)
+    # sms_maama_contacts = Contact.get_sms_maama_contacts(project_list)
 
     contacts = Contact.get_sms_maama_weekly_contacts()
     sms_maama_contacts = Contact.get_sms_maama_contacts()
-    #sms_maama_contacts = Contact.get_sms_maama_contacts(project_list)
     sent_messages = Message.get_sms_maama_sent_messages()
     delivered_messages = Message.get_sms_maama_delivered_messages()
     failed_messages = Message.get_sms_maama_failed_messages()

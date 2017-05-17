@@ -133,22 +133,22 @@
     </table>
 <br>
 
-<nav class="|nav-extended">
-    <div class="nav-wrapper">
-        <div class="container">
-            <a href="#" class="brand-logo center">Week's Responses</a>
-        </div>
-    </div>
-</nav>
-
-    <table class="striped">
-        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>
-        {% for response in responses %}
-            <tr><td>{{ response.urn }}</td><td>{{ response.text }}</td><td>{{ response.status }}</td><td>{{ response.value }}</td></tr>
-        {% endfor %}
-    </table>
-<br>
-result_list
+{#<nav class="|nav-extended">#}
+{#    <div class="nav-wrapper">#}
+{#        <div class="container">#}
+{#            <a href="#" class="brand-logo center">Week's Responses</a>#}
+{#        </div>#}
+{#    </div>#}
+{#</nav>#}
+{##}
+{#    <table class="striped">#}
+{#        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>#}
+{#        {% for response in responses %}#}
+{#            <tr><td>{{ response.urn }}</td><td>{{ response.text }}</td><td>{{ response.status }}</td><td>{{ response.value }}</td></tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+{#<br>#}
+{#result_list#}
 
 </div>
     </p>
