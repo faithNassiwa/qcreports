@@ -1,12 +1,16 @@
+amqp==2.1.4
 appdirs==1.4.3
+billiard==3.5.0.2
 cairocffi==0.8.0
 CairoSVG==1.0.22
+celery==4.0.2
 cffi==1.10.0
 cssselect==1.0.1
 Django==1.10.6
 django-nose==1.4.4
 ez-setup==0.9
 html5lib==0.999999999
+kombu==4.0.2
 lxml==3.7.3
 nose==1.3.7
 packaging==16.8
@@ -15,8 +19,10 @@ pyparsing==2.2.0
 Pyphen==0.9.4
 pytz==2017.2
 -e git+https://github.com/rapidpro/rapidpro-python.git@324230070cace6056a04bbc7e7089f5f44dd63da#egg=rapidpro_python
+redis==2.10.5
 requests==2.13.0
 six==1.10.0
 tinycss==0.4
+vine==1.1.3
 WeasyPrint==0.36
 webencodings==0.5.1

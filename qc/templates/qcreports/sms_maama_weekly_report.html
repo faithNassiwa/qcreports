@@ -1,0 +1,158 @@
+{% extends "qcreports/base.html" %}
+
+{% block title %}SMS Maama - QC Report{% endblock %}
+{% block project_title%}SMS Maama{% endblock %}
+
+{% block content %}
+<div class="card">
+<div class="card-content" align="center">
+    <span class="card-title">{% block report_title%}Weekly Report{% endblock %}</span>
+    <p>
+
+<p>Report Date: {{ start_date }} -  {{ end_date }}</p><br />
+
+
+<div class="container">
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center"> All SMS Maama Contacts</a>
+        </div>
+    </div>
+</nav>
+<table class="striped">
+    <thead><tr><td>PHONE NUMBER</td><td>Name</td><td>Points</td></tr></thead>
+    {% for contact in sms_maama_contacts %}
+        <tr><td>{{ contact.urns }}</td><td>{{ contact.name }}</td><td>{{ contact.fields }}</td></tr>
+    {% endfor %}
+</table>
+<h5>Total enrolled contacts  = {{ contacts_count }}</h5>
+<br><br>
+
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">Week's Enrolled Contacts</a>
+        </div>
+    </div>
+</nav>
+<table class="striped">
+    <thead><tr><td>PHONE NUMBER</td><td>Points</td><td>ENROLLED ON</td><td>LANGUAGE</td></tr></thead>
+    {% for contact in contacts %}
+        <tr><td>{{ contact.urns }}</td><td>{{ contact.fields }}</td><td>{{ contact.created_on }}</td>
+            <td>{{ contact.language }}</td></tr>
+    {% endfor %}
+</table>
+<h5>Total week's enrolled contacts  = {{ weekly_contacts_count }}</h5>
+<br><br>
+
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">Week's Read Messages</a>
+        </div>
+    </div>
+</nav>
+
+<table class="striped">
+    <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>SENT ON</td></tr></thead>
+    {% for msg in delivered_messages %}
+        <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td></tr>
+    {% endfor %}
+</table>
+<h5>Total Messages Sent = {{ messages_count }}</h5>
+<h5>Total Messages Read = {{ read_messages_count }}</h5>
+
+{#<nav class="|nav-extended">#}
+{#    <div class="nav-wrapper">#}
+{#        <div class="container">#}
+{#            <a href="#" class="brand-logo center">UNREAD MESSAGES</a>#}
+{#        </div>#}
+{#    </div>#}
+{#</nav>#}
+{##}
+{#    <table class="striped">#}
+{#        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>SENT ON</td></tr></thead>#}
+{#        {% for msg in unread_messages %}#}
+{#            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td></tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+{#<br>#}
+<br>
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">Week's Failed to Send Messages</a>
+        </div>
+    </div>
+</nav>
+
+    <table class="striped">
+        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>SENT ON</td></tr></thead>
+        {% for msg in failed_messages %}
+            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td></tr>
+        {% endfor %}
+    </table>
+<h5>Total Failed to Send Messages  = {{ failed_messages_count }}</h5>
+<br>
+
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">Week's Baby Responses</a>
+        </div>
+    </div>
+</nav>
+
+    <table class="striped">
+        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>
+        {% for msg in baby_responses %}
+            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.created_on }}</td></tr>
+        {% endfor %}
+    </table>
+<br>
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">Week's Responses</a>
+        </div>
+    </div>
+</nav>
+
+    <table class="striped">
+        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>
+        {% for msg in flow_responses %}
+            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.created_on }}</td></tr>
+        {% endfor %}
+    </table>
+<br>
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">Week's Responses</a>
+        </div>
+    </div>
+</nav>
+
+    <table class="striped">
+        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>
+        {% for response in responses %}
+            <tr><td>{{ response.urn }}</td><td>{{ response.text }}</td><td>{{ response.status }}</td><td>{{ response.value }}</td></tr>
+        {% endfor %}
+    </table>
+<br>
+result_list
+
+</div>
+    </p>
+</div>
+</div>
+
+{% endblock %}

@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Kampala'
 
 USE_I18N = True
 
@@ -123,8 +123,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-HOST = ''
-KEY = ''
+HOST = 'hiwa.tmcg.co.ug'
+KEY = '3aac2aba67a0cf83dc0ea49151a05088277eb4d6'
 
 
 EMAIL_HOST = 'smtp.gmail.com'
@@ -136,3 +136,11 @@ EMAIL_USE_TLS = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MAILING_LIST = []
+
+# CELERY STUFF
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Kampala'
