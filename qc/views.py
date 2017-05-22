@@ -42,7 +42,12 @@ def sms_maama_weekly(request):
     unread_messages_count = Message.get_sms_maama_unread_messages_count()
     unread_messages = Message.get_sms_maama_unread_messages()
     flow_responses = Message.get_sms_maama_flow_responses()
+    # responses = Message.get_specific_flow_response()
     baby_responses = Message.get_sms_maama_flow_responses_baby()
+    flows = Flow.objects.filter(run_id__contact__groups__name__in=['Baby', 'SMS Maama'])\
+        .exclude(name__contains='Single Message').distinct()
+    messages = Message.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in',
+                                      status='handled').distinct()
     start_date = datetime.datetime.now() - datetime.timedelta(days=7)
     end_date = datetime.datetime.now()
     this_day = now()

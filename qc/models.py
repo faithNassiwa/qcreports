@@ -293,7 +293,9 @@ class Message(models.Model):
         return cls.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled',
                                   text='Baby', created_on__range=(date_diff, datetime.datetime.now())).all()
 
-    # def get_specific_flow_response(self):
+
+    # @classmethod
+    # def get_specific_flow_response(cls):
     #
     #     run_flow = Flow.objects.filter(run_id__contact__groups__name__in=['Baby', 'SMS Maama']).all()
     # #run_values = Value.objects.all()
@@ -301,8 +303,9 @@ class Message(models.Model):
     # messages = Message.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], folder='flow').all()
     # # responses = messages.intersection(run_contact, run_flow)
     # result_list = list(chain(run_contact, messages, run_flow))
-    #
-    #     return messages.union(run_values, run_contact)
+    #     flows = Flow.objects.filter(run_id__contact__groups__name__in=['Baby', 'SMS Maama']).all()
+    #     messages = Message.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled').all()
+    #     return Message.flows.all()
 
     @classmethod
     def clean_msg_contacts(cls):

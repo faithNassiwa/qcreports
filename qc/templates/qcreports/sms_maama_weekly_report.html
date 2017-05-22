@@ -22,15 +22,16 @@
     </div>
 </nav>
 <table class="striped">
-    <thead><tr><td>PHONE NUMBER</td><td>Name</td><td>Points</td></tr></thead>
+    <thead><tr><td>PHONE NUMBER</td><td>NAME</td><td>POINTS</td><td>COMPLETED FLOWS</td></tr></thead>
     {% for contact in sms_maama_contacts %}
-        <tr><td>{{ contact.urns }}</td><td>{{ contact.name }}</td><td>{{ contact.fields }}</td></tr>
+        <tr><td>{{ contact.urns }}</td><td>{{ contact.name }}</td><td>{{ contact.fields }}</td>
+            <td>{% for flow in flows %}{% if flow.run_id.contact.urns == contact.urns %}<br>{{ flow.name }}{% endif %}{% endfor %}</td></tr>
     {% endfor %}
 </table>
 <h5>Total enrolled contacts  = {{ contacts_count }}</h5>
 <br><br>
 
-
+{% if contacts %}
 <nav class="|nav-extended">
     <div class="nav-wrapper">
         <div class="container">
@@ -47,8 +48,20 @@
 </table>
 <h5>Total week's enrolled contacts  = {{ weekly_contacts_count }}</h5>
 <br><br>
+    {% else %}
+    <nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">No Contacts Enrolled this Week</a>
+        </div>
+    </div>
+</nav>
+    <h5>Total week's enrolled contacts  = {{ weekly_contacts_count }}</h5>
+{% endif %}
+<br><br>
 
 
+{% if delivered_messages %}
 <nav class="|nav-extended">
     <div class="nav-wrapper">
         <div class="container">
@@ -65,7 +78,18 @@
 </table>
 <h5>Total Messages Sent = {{ messages_count }}</h5>
 <h5>Total Messages Read = {{ read_messages_count }}</h5>
-
+    {% else %}
+    <nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center"> No Read Messages this Week</a>
+            </div>
+        </div>
+    </nav>
+    <h5>Total Messages Sent = {{ messages_count }}</h5>
+    <h5>Total Messages Read = {{ read_messages_count }}</h5>
+{% endif %}
+<br><br>
 {#<nav class="|nav-extended">#}
 {#    <div class="nav-wrapper">#}
 {#        <div class="container">#}
@@ -81,8 +105,9 @@
 {#        {% endfor %}#}
 {#    </table>#}
 {#<br>#}
-<br>
 
+
+{% if failed_messages %}
 <nav class="|nav-extended">
     <div class="nav-wrapper">
         <div class="container">
@@ -98,25 +123,21 @@
         {% endfor %}
     </table>
 <h5>Total Failed to Send Messages  = {{ failed_messages_count }}</h5>
-<br>
-
-
-<nav class="|nav-extended">
+<br><br>
+    {% else %}
+    <nav class="|nav-extended">
     <div class="nav-wrapper">
         <div class="container">
-            <a href="#" class="brand-logo center">Week's Baby Responses</a>
+            <a href="#" class="brand-logo center">No Failed to Send Messages this Week</a>
         </div>
     </div>
-</nav>
+    </nav>
+    <h5>Total Failed to Send Messages  = {{ failed_messages_count }}</h5>
+{% endif %}
+<br><br>
 
-    <table class="striped">
-        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>
-        {% for msg in baby_responses %}
-            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.created_on }}</td></tr>
-        {% endfor %}
-    </table>
-<br>
 
+{% if flow_responses%}
 <nav class="|nav-extended">
     <div class="nav-wrapper">
         <div class="container">
@@ -128,10 +149,49 @@
     <table class="striped">
         <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>
         {% for msg in flow_responses %}
-            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.created_on }}</td></tr>
+            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td>
+            </tr>
         {% endfor %}
     </table>
-<br>
+<br><br>
+    {% else %}
+    <nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">No Responses this Week</a>
+        </div>
+    </div>
+    </nav>
+{% endif %}
+<br><br>
+
+
+{% if baby_responses %}
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">Week's Baby Responses</a>
+        </div>
+    </div>
+</nav>
+
+    <table class="striped">
+        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>
+        {% for msg in baby_responses %}
+            <tr><td>{{ msg.urn }}</td><td>{{ msg.text }}</td><td>{{ msg.status }}</td><td>{{ msg.sent_on }}</td></tr>
+        {% endfor %}
+    </table>
+<br><br>
+    {% else %}
+    <nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="#" class="brand-logo center">No Baby Responses this Week</a>
+        </div>
+    </div>
+    </nav>
+{% endif %}
+<br><br>
 
 {#<nav class="|nav-extended">#}
 {#    <div class="nav-wrapper">#}
@@ -142,9 +202,12 @@
 {#</nav>#}
 {##}
 {#    <table class="striped">#}
-{#        <thead><tr><td>PHONE NUMBER</td><td>MESSAGE</td><td>STATUS</td><td>RECEIVED ON</td></tr></thead>#}
-{#        {% for response in responses %}#}
-{#            <tr><td>{{ response.urn }}</td><td>{{ response.text }}</td><td>{{ response.status }}</td><td>{{ response.value }}</td></tr>#}
+{#        <thead><tr><td>PHONE NUMBER</td><td>FLOW</td><td>MESSAGE</td><td>RECEIVED ON</td></tr></thead>#}
+{#        {% for flow in flows %}#}
+{#            <tr><td>{{ flow.run_id.contact.urns }}</td><td>{{ flow.name }}</td>#}
+{#                <td>{% for message in messages %}{% if flow.run_id.contact.urns == message.urn%}#}
+{#                    <br>{{ message.text }}{% endif %}{% endfor %}</td><td>{% for message in messages %}#}
+{#                    {% if flow.run_id.contact.urns == message.urn %}<br>{{ message.sent_on }}{% endif %}{% endfor %}</td></tr>#}
 {#        {% endfor %}#}
 {#    </table>#}
 {#<br>#}
