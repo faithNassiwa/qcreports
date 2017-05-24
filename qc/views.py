@@ -23,12 +23,12 @@ def index(request):
 
 
 def sms_maama_weekly(request):
-    # report_groups = Group.objects.filter(send_sync=True)
+    # report_groups = Group.objects.filter(send_sync=True).all()
     # project_list = []
     # for report_group in report_groups:
     #     project_list.append(report_group.name)
     # sms_maama_contacts = Contact.get_sms_maama_contacts(project_list)
-
+    groups = Group.get_sms_maama_groups()
     contacts = Contact.get_sms_maama_weekly_contacts()
     sms_maama_contacts = Contact.get_sms_maama_contacts()
     sent_messages = Message.get_sms_maama_sent_messages()
@@ -42,12 +42,17 @@ def sms_maama_weekly(request):
     unread_messages_count = Message.get_sms_maama_unread_messages_count()
     unread_messages = Message.get_sms_maama_unread_messages()
     flow_responses = Message.get_sms_maama_flow_responses()
+    flow_responses_count = Message.get_sms_maama_flow_responses_count()
     # responses = Message.get_specific_flow_response()
     baby_responses = Message.get_sms_maama_flow_responses_baby()
+    baby_responses_count = Message.get_sms_maama_flow_responses_baby_count()
+    stops = Message.get_sms_maama_opted_out()
+    stops_count = Message.get_sms_maama_opted_out_count()
     flows = Flow.objects.filter(run_id__contact__groups__name__in=['Baby', 'SMS Maama'])\
         .exclude(name__contains='Single Message').distinct()
     messages = Message.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in',
                                       status='handled').distinct()
+    reports = chain(flows, messages)
     start_date = datetime.datetime.now() - datetime.timedelta(days=7)
     end_date = datetime.datetime.now()
     this_day = now()

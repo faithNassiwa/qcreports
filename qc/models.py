@@ -12,6 +12,8 @@ class Group(models.Model):
     name = models.CharField(max_length=200)
     query = models.CharField(max_length=200, null=True, blank=True)
     count = models.IntegerField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     get_sync = models.BooleanField(default=False)
     send_sync = models.BooleanField(default=False)
 
@@ -23,27 +25,39 @@ class Group(models.Model):
         added = 0
         for group_batch in client.get_groups().iterfetches(retry_on_rate_exceed=True):
             for group in group_batch:
-                if not cls.group_exists(group):
+                if cls.group_exists(group):
+                    cls.objects.filter(uuid=group.uuid).update(name=group.name, query=group.query, count=group.count)
+                    added += 0
+
+                else:
                     cls.objects.create(uuid=group.uuid, name=group.name, query=group.query, count=group.count)
                     added += 1
-                elif cls.group_exists(group):
-                    cls.objects.filter(uuid=group.uuid).update(name=group.name, query=group.query, count=group.count)
-                else:
-                    added += 0
+
         return added
 
     @classmethod
     def get_group(cls):
         if cls.objects.filter(get_sync=True).exists():
-            group = cls.objects.filter(get_sync=True).first()
-            Contact.save_contacts(group=group)
-            Contact.clean_contacts()
+            groups = cls.objects.filter(get_sync=True).all()
+            for group in groups:
+                Contact.save_contacts(group=group)
+                Contact.clean_contacts()
         else:
             print ("All groups synced")
 
     @classmethod
     def group_exists(cls, group):
         return cls.objects.filter(uuid=group.uuid).exists()
+
+    @classmethod
+    def get_sms_maama_groups(cls):
+        date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
+        return cls.objects.filter(name__in=['SMS Maama 10', 'SMS Maama 11', 'SMS Maama 12', 'SMS Maama 13',
+                                            'SMS Maama 14', 'SMS Maama 15', 'SMS Maama 16', 'SMS Maama 17',
+                                            'SMS Maama 18', 'SMS Maama 19', 'SMS Maama 20', 'SMS Maama 21',
+                                            'SMS Maama 22', 'SMS Maama 23', 'SMS Maama 24', 'SMS Maama 25',
+                                            'SMS Maama 26', 'SMS Maama 27', 'SMS Maama 28'],
+                                  modified_at__range=(date_diff, datetime.datetime.now())).all()
 
 
 class Contact(models.Model):
@@ -65,20 +79,22 @@ class Contact(models.Model):
         folders = ['sent', 'failed', 'flows', 'outbox']
         for contact_batch in client.get_contacts(group=group.name).iterfetches(retry_on_rate_exceed=True):
             for contact in contact_batch:
-                if not cls.contact_exists(contact):
-                    cls.objects.create(uuid=contact.uuid, name=contact.name, language=contact.language,
-                                       urns=contact.urns, groups=group, fields=contact.fields['points'],
-                                       blocked=contact.blocked, stopped=contact.stopped,
-                                       created_on=contact.created_on, modified_on=contact.modified_on)
-                    added += 1
-
-                else:
+                if cls.contact_exists(contact):
                     cls.objects.filter(uuid=contact.uuid).update(name=contact.name, language=contact.language,
                                                                  urns=contact.urns, groups=group,
                                                                  fields=contact.fields.get('points'),
                                                                  blocked=contact.blocked, stopped=contact.stopped,
                                                                  created_on=contact.created_on,
                                                                  modified_on=contact.modified_on)
+
+
+                else:
+                    cls.objects.create(uuid=contact.uuid, name=contact.name, language=contact.language,
+                                       urns=contact.urns, groups=group, fields=contact.fields['points'],
+                                       blocked=contact.blocked, stopped=contact.stopped,
+                                       created_on=contact.created_on, modified_on=contact.modified_on)
+                    added += 1
+
                 c = Contact.objects.get(uuid=contact.uuid)
 
                 for folder in folders:
@@ -283,16 +299,39 @@ class Message(models.Model):
 
     @classmethod
     def get_sms_maama_flow_responses(cls):
-        date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
+        date_diff = datetime.datetime.now() - datetime.timedelta(days=21)
         return cls.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled',
                                   created_on__range=(date_diff, datetime.datetime.now())).all()
+
+    @classmethod
+    def get_sms_maama_flow_responses_count(cls):
+        date_diff = datetime.datetime.now() - datetime.timedelta(days=21)
+        return cls.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled',
+                                  created_on__range=(date_diff, datetime.datetime.now())).count()
 
     @classmethod
     def get_sms_maama_flow_responses_baby(cls):
         date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
         return cls.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled',
-                                  text='Baby', created_on__range=(date_diff, datetime.datetime.now())).all()
+                                  text='Baby', sent_on__range=(date_diff, datetime.datetime.now())).all()
 
+    @classmethod
+    def get_sms_maama_flow_responses_baby_count(cls):
+        date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
+        return cls.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled',
+                                  text='Baby', sent_on__range=(date_diff, datetime.datetime.now())).count()
+
+    @classmethod
+    def get_sms_maama_opted_out(cls):
+        date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
+        return cls.objects.filter(contact__groups__name__in=['SMS Maama Opted Out'], direction='in', status='handled',
+                                  text__iexact='STOP', sent_on__range=(date_diff, datetime.datetime.now())).all()
+
+    @classmethod
+    def get_sms_maama_opted_out_count(cls):
+        date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
+        return cls.objects.filter(contact__groups__name='SMS Maama Opted Out', direction='in', status='handled',
+                                  text__iexact='STOP', sent_on__range=(date_diff, datetime.datetime.now())).count()
 
     # @classmethod
     # def get_specific_flow_response(cls):

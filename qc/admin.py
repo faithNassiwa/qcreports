@@ -11,14 +11,14 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('id', 'uuid', 'name', 'language', 'urns', 'groups', 'fields', 'blocked', 'stopped',
                     'created_on', 'modified_on')
     list_filter = ('created_on', 'modified_on')
-    search_fields = ['name', 'urns']
+    search_fields = ['name', 'urns', 'groups']
 
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('id', 'folder', 'contact', 'urn', 'broadcast', 'channel', 'direction', 'type', 'status',
                     'visibility', 'text', 'labels','created_on', 'sent_on', 'modified_on')
     list_filter = ('created_on', 'modified_on')
-    search_fields = ['urn']
+    search_fields = ['urn', 'text']
 
 
 class FlowAdmin(admin.ModelAdmin):
