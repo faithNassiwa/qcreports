@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from qc.views import html_to_pdf_view
 from django.utils.timezone import now
-from qc.models import Group, Contact, Message
+from qc.models import Group, Contact, Message, Run
 
 
 class Command(BaseCommand):

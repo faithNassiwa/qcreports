@@ -1,5 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
 {% load staticfiles %}
-<html>
 <head>
      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
@@ -24,7 +25,13 @@
 
 {% endblock %}
 
-
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            Prepared by: {{ user.username }}
+        </div>
+    </div>
+</footer>
 
 
  <!--Import jQuery before materialize.js-->
