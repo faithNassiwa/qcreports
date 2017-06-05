@@ -94,19 +94,17 @@ class Group(models.Model):
 
     @classmethod
     def get_sms_maama_groups(cls):
-        date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
         return cls.objects.filter(name__in=['SMS Maama 10', 'SMS Maama 11', 'SMS Maama 12', 'SMS Maama 13',
                                             'SMS Maama 14', 'SMS Maama 15', 'SMS Maama 16', 'SMS Maama 17',
                                             'SMS Maama 18', 'SMS Maama 19', 'SMS Maama 20', 'SMS Maama 21',
                                             'SMS Maama 22', 'SMS Maama 23', 'SMS Maama 24', 'SMS Maama 25',
-                                            'SMS Maama 26', 'SMS Maama 27', 'SMS Maama 28'],
-                                  modified_at__range=(date_diff, datetime.datetime.now())).order_by('name').all()
+                                            'SMS Maama 26', 'SMS Maama 27', 'SMS Maama 28']).order_by('name').all()
 
 
 class Contact(models.Model):
     id = models.IntegerField(primary_key=True)
     uuid = models.CharField(max_length=200)
-    name = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     language = models.CharField(max_length=200, null=True)
     urns = models.CharField(max_length=200)
     groups = models.ForeignKey(Group)
@@ -350,11 +348,11 @@ class Message(models.Model):
         return cls.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled',
                                   created_on__range=(date_diff, datetime.datetime.now())).all()
 
-
     @classmethod
     def get_sms_maama_flow_responses(cls):
         return cls.objects.filter(contact__groups__name__in=['Baby', 'SMS Maama'], direction='in', status='handled',
-                                  text__in=['yes', 'Yes', 'YES','yee','Yee','y','No', 'NO','no', 'Nedda', 'nedda','n']).all()
+                                  text__in=['yes', 'Yes', 'YES', 'yee', 'Yee', 'y', 'No', 'NO', 'no', 'Nedda', 'nedda',
+                                            'n']).all()
 
     @classmethod
     def get_sms_maama_flow_responses_count(cls):
@@ -419,16 +417,7 @@ class Run(models.Model):
         added = 0
         for run_batch in client.get_runs(contact=contact.uuid).iterfetches(retry_on_rate_exceed=True):
             for run in run_batch:
-                if cls.run_exists(run):
-                    cls.objects.filter(run_id=run.id).update(responded=run.responded, contact=contact,
-                                                             created_on=run.created_on, modified_on=run.modified_on,
-                                                             exit_type=run.exit_type, flow=flow)
-                    r = Run.objects.get(run_id=run.id)
-                    Step.add_steps(run=r, steps=run.path)
-                    Value.add_values(run=r, values=run.values)
-                    added += 0
-
-                else:
+                if not cls.run_exists(run):
                     cls.objects.create(run_id=run.id, responded=run.responded, contact=contact,
                                        created_on=run.created_on, modified_on=run.modified_on,
                                        exit_type=run.exit_type, flow=flow)
@@ -494,33 +483,33 @@ class Value(models.Model):
     def add_values(cls, run, values):
         added = 0
         for val in values:
-            cls.objects.create(value=val, run=run)
-            added += 1
+            if not cls.value_exists(run=run):
+                cls.objects.create(value=val, run=run)
+                added += 1
         return added
+
+    @classmethod
+    def value_exists(cls, run):
+        return cls.objects.filter(run=run).exists()
 
     @classmethod
     def sms_maama_contact_flows_values(cls):
         # date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
-        return cls.objects.filter(run__responded=True, value__in=['bleeding_with_pain', 'mosquito net response',
-                                                                  'due to TB', 'Received Malaria Medicine',
-                                                                  'easy before', 'easy before pregnancy',
-                                                                  'Pain Urinating', 'increased thirst urination',
-                                                                  'foul smell or pain response', 'Reduced Abdomen',
-                                                                  'Swelling of your body', 'contractions response',
-                                                                  'Headache', 'Delivered', 'Bleeding Response',
-                                                                  'signs of infection', 'Baby Yellow Eyes',
-                                                                  'Do you feel sad', 'Pap Test'],
-                                  run__flow__name__in=['Screening 1', 'Screening 2', 'Screening 3', 'Screening 4',
-                                                       'Screening 5', 'Screening 6', 'Screening 7', 'Screening 8',
-                                                       'Screening 9', 'Screening 10', 'Screening 11', 'Screening 12',
-                                                       'Screening 13', 'Screening 14', 'Screening 15', 'Screening 16',
-                                                       'Screening 17', 'Screening 18', 'Screening 19']).distinct()
+        return cls.objects.filter(value__in=['bleeding_with_pain', 'mosquito_net_response',
+                                             'due_to_TB', 'received_malaria_medicine',
+                                             'easy_before', 'easy_before_pregnancy',
+                                             'pain_urinating', 'increased_thirst_urination',
+                                             'foul_smell_or_pain_response', 'reduced_abdomen',
+                                             'swelling_of_your_body', 'contractions_response',
+                                             'Headache', 'Delivered', 'Bleeding_Response',
+                                             'signs_of_infection', 'baby_yellow_eyes',
+                                             'do_you_feel_sad', 'pap_test'], run__responded=True).distinct()
 
     @classmethod
     def sms_maama_contact_flows_antenatal_values(cls):
         # date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
-        return cls.objects.filter(run__responded=True, value__in=['4th antenatal appt', '3rd antenatal appt',
-                                                                  'attend last antenatal visit'],
+        return cls.objects.filter(run__responded=True, value__in=['4th_antenatal_appt', '3rd_antenatal_appt',
+                                                                  'attend_last_antenatal_visit'],
                                   run__flow__name__in=['First appointment reminder', 'Second appointment reminder',
                                                        'Third appointment reminder']).distinct()
 
