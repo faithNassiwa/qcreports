@@ -236,13 +236,13 @@
 
     <table class="striped">
         <thead><tr><td>PHONE NUMBER</td><td>Screening</td><td> Question Sent On</td><td>Response</td><td>Responded On</td></tr></thead>
-        {% for f in flows %}
+        {% for f in flows  %}
             <tr><td>{{ f.run.contact.urns }}</td><td>{{ f.run.flow.name }}</td><td>{{ f.run.created_on }}</td>
-                {% for fr in flow_responses %}
-                    {% if f.run.contact.urns == fr.urn %}
 
-                <td>{{ fr.text }}</td><td>{{ fr.sent_on }}</td>
-            {% endif %}{% endfor %}</tr>
+                <td>{% if f.run.contact.urns == fr.urn %}{% for fr in flow_responses %}
+                    {{ fr.text }}{% endfor %}{% endif %}</td><td>{% for fr in flow_responses %}
+                    {% if f.run.contact.urns == fr.urn %}{{ fr.sent_on }}{% endif %}{% endfor %}</td>
+            }</tr>
         {% endfor %}
     </table>
 
