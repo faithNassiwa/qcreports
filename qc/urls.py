@@ -4,9 +4,10 @@ import views as qc_views
 
 urlpatterns = [
     url(r'^$', qc_views.index),
+    url(r'^cost/$', qc_views.project_cost),
     url(r'^test_pdf_found/$', qc_views.html_to_pdf_view),
     url(r'^sms_maama_weekly/$', qc_views.sms_maama_weekly),
-    url(r'^sms_maama_weekly_pdf/$', qc_views.print_report),
+    url(r'^sms_maama_weekly_pdf/$', qc_views.view_report),
     url(r'^sms_maama_weekly_pdf_2/$', qc_views.generate_pdf),
     url(r'^sms_maama_weekly_pdf_3/$', qc_views.pdf_view),
     url(r'^failed_messages/$', qc_views.daily_messages_failed),

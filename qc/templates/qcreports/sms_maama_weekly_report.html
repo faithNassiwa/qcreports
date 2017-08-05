@@ -258,6 +258,11 @@
 {% endif %}
 <br><br>
 
+<br>{% for f in flows %}{{ f.run.modified_on }}{% endfor %}
+<br>{{ flows.count }}
+<br>
+<br> {% for f in flow_responses %}{{ f.sent_on }}{% endfor %}
+<br>{{ flow_responses.count }}
 
 {% if antenatal_responses %}
 <nav class="|nav-extended">
@@ -288,6 +293,9 @@
         </div>
     </div>
     </nav>
+
+    <br>{{ antenatal_responses }}
+    <br>{{ flow_responses }}
 {% endif %}
 <br><br>
 

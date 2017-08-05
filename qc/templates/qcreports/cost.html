@@ -1,0 +1,28 @@
+{% extends "qcreports/base.html" %}
+
+{% block title %}SMS Maama - QC Report{% endblock %}
+{% block project_title%}SMS Maama{% endblock %}
+
+{% block content %}
+<div class="container">
+<br>
+
+<nav class="|nav-extended">
+    <div class="nav-wrapper">
+        <div class="container-fluid">
+            <a href="#" style="font-size: x-large"> SMS Maama Message Costs as of {{ cost_date }}</a>
+        </div>
+    </div>
+</nav>
+<table class="striped">
+    <thead><tr><th>Message Type</th><th>SMS MAAMA Message Count</th><th>Total Cost</th></tr></thead>
+        <tr><td>Incoming Messages</td><td>{{ number_of_incoming_messages }}</td><td>{{ cost_of_incoming_messages }}</td></tr>
+        <tr><td>Outgoing Messages</td><td>{{ number_of_outgoing_messages }}</td><td>{{ cost_of_outgoing_messages }}</td></tr>
+        <tr><th></th><td></td><td>{{ total_cost }}</td></tr>
+
+</table>
+<br><br>
+</div>
+{% endblock %}
+
+
