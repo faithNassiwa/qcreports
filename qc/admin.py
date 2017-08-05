@@ -8,7 +8,7 @@ class EmailAdmin(admin.ModelAdmin):
 
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('id', 'uuid', 'name', 'language', 'urns', 'groups', 'fields', 'blocked', 'stopped',
+    list_display = ('id', 'uuid', 'name', 'language', 'urns', 'groups', 'points', 'number_of_weeks', 'blocked', 'stopped',
                     'created_on', 'modified_on')
     list_filter = ('created_on', 'modified_on')
     search_fields = ['name', 'urns', 'groups']
@@ -22,7 +22,7 @@ class MessageAdmin(admin.ModelAdmin):
 
 
 class FlowAdmin(admin.ModelAdmin):
-    list_display = ('id', 'uuid', 'name', 'expires', 'created_on', 'sync_flows')
+    list_display = ('id', 'uuid', 'name', 'expires', 'created_on')
     search_fields = ['name']
 
 
@@ -42,8 +42,8 @@ class StepAdmin(admin.ModelAdmin):
 
 
 class ValueAdmin(admin.ModelAdmin):
-    list_display = ('id', 'value', 'run_id')
-    search_fields = ['value']
+    list_display = ('id', 'value_name', 'value', 'category', 'node', 'time', 'run_id')
+    search_fields = ['value', 'value_name']
 
 
 admin.site.register(Contact, ContactAdmin)

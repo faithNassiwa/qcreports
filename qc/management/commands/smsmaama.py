@@ -9,8 +9,4 @@ class Command(BaseCommand):
         Group.get_group()
         Contact.clean_contacts()
         Message.clean_msg_contacts()
-        #html_to_pdf_view()
-        #this_day = now()
-        #target = 'media/'+str(this_day)[:-22]+'.pdf'
-        #Email.send_message_email(target)
-        self.stdout.write(self.style.SUCCESS('Successfully synced all groups' ))
+        self.stdout.write(self.style.SUCCESS('Successfully synced all groups'))
