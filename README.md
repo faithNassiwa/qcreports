@@ -1,9 +1,9 @@
-#QCReport ( SMSMaama Reporting)
+# QCReport ( SMSMaama Reporting)
 ====================================================
 QCReport is used for generating weekly reports on SMSMaama Rapidpro Project.
 
 
-##Usage
+## Usage
 ```
 #Clone the project
 git clone https://github.com/faithNassiwa/qcreports.git
