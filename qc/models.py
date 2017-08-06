@@ -102,6 +102,7 @@ class Contact(models.Model):
     fields = models.TextField(null=True, blank=True)
     points = models.CharField(max_length=2, null=True, blank=True)
     number_of_weeks = models.CharField(max_length=2, null=True, blank=True)
+    sms_maama_enrollment_date = models.CharField(max_length=30)
     blocked = models.BooleanField(default=False)
     stopped = models.BooleanField(default=False)
     created_on = models.DateTimeField(null=True, blank=True)
@@ -120,14 +121,18 @@ class Contact(models.Model):
                                                                  urns=contact.urns, groups=group, fields=contact.fields,
                                                                  points=contact.fields.get('points'),
                                                                  number_of_weeks=contact.fields.get('number_of_weeks'),
+                                                                 sms_maama_enrollment_date=contact.fields.get
+                                                                 ('sms_maama_enrollment_date'),
                                                                  blocked=contact.blocked, stopped=contact.stopped,
                                                                  created_on=contact.created_on,
                                                                  modified_on=contact.modified_on)
 
                 else:
                     cls.objects.create(uuid=contact.uuid, name=contact.name, language=contact.language,
-                                       urns=contact.urns, groups=group, fields=contact.fields, points=contact.fields['points'],
-                                       number_of_weeks=contact.fields['number_of_weeks'],
+                                       urns=contact.urns, groups=group, fields=contact.fields,
+                                       points=contact.fields['points'],
+                                       number_of_weeks=contact.fields['number_of_weeks'], sms_maama_enrollment_date=
+                                       contact.fields.get('sms_maama_enrollment_date'),
                                        blocked=contact.blocked, stopped=contact.stopped,
                                        created_on=contact.created_on, modified_on=contact.modified_on)
                     added += 1
@@ -155,7 +160,6 @@ class Contact(models.Model):
     def get_contacts_count(cls):
         date_diff = datetime.datetime.now() - datetime.timedelta(days=7)
         return cls.objects.filter(created_on__range=(date_diff, datetime.datetime.now())).count()
-
 
     @classmethod
     def get_sms_maama_contacts(cls):
@@ -434,15 +438,15 @@ class Run(models.Model):
                     Value.add_values(run=r, values=run.values)
                     added += 1
 
-                else:
-                    cls.objects.filter(run_id=run.id).update(responded=run.responded, contact=contact,
-                                                             created_on=run.created_on, modified_on=run.modified_on,
-                                                             exit_type=run.exit_type)
-                    r = Run.objects.get(run_id=run.id)
-                    flow = Flow.objects.get(uuid=run.flow.uuid)
-                    Run.objects.filter(run_id=run.id).update(flow=flow.id)
-                    Step.add_steps(run=r, steps=run.path)
-                    Value.add_values(run=r, values=run.values)
+                # else:
+                #     cls.objects.filter(run_id=run.id).update(responded=run.responded, contact=contact,
+                #                                              created_on=run.created_on, modified_on=run.modified_on,
+                #                                              exit_type=run.exit_type)
+                #     r = Run.objects.get(run_id=run.id)
+                #     flow = Flow.objects.get(uuid=run.flow.uuid)
+                #     Run.objects.filter(run_id=run.id).update(flow=flow.id)
+                #     Step.add_steps(run=r, steps=run.path)
+                #     Value.add_values(run=r, values=run.values)
 
         return added
 
@@ -516,11 +520,11 @@ class Value(models.Model):
                                    node=values[outer_key].node,
                                    time=values[outer_key].time, run=run)
                 added += 1
-            else:
-                cls.objects.filter(run=run).update(value_name=outer_key, value=values[outer_key].value,
-                                                   category=values[outer_key].category,
-                                                   node=values[outer_key].node,
-                                                   time=values[outer_key].time)
+            # else:
+            #     cls.objects.filter(run=run).update(value_name=outer_key, value=values[outer_key].value,
+            #                                        category=values[outer_key].category,
+            #                                        node=values[outer_key].node,
+            #                                        time=values[outer_key].time)
 
         return added
 
@@ -542,6 +546,7 @@ class Value(models.Model):
                                                   '4th_antenatal_appt', '3rd_antenatal_appt',
                                                   'attend_last_antenatal_visit'],
                                   run__responded=True).order_by('run__contact__created_on')
+
     @classmethod
     def sms_maama_contact_flows_screening_values(cls):
         return cls.objects.filter(value_name__in=['bleeding_with_pain', 'mosquito_net_response',
@@ -558,7 +563,7 @@ class Value(models.Model):
     @classmethod
     def sms_maama_contact_flows_antenatal_values(cls):
         return cls.objects.filter(run__responded=True, value_name__in=['4th_antenatal_appt', '3rd_antenatal_appt',
-                                                                       'attend_last_antenatal_visit']).\
+                                                                       'attend_last_antenatal_visit']). \
             order_by('run__contact__created_on')
 
 
