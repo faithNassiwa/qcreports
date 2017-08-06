@@ -204,12 +204,8 @@ def sms_maama_report():
     data = [all_sms_maama_contact_titles]
     colwidths = (100, 120, 40, 120, 80)
     for i, contact in enumerate(sms_maama_contacts):
-        for j, enrollment in enumerate(enrollments):
-            if contact.urns == enrollment.urn:
-                data.append(
-                    [contact.urns, contact.name, contact.fields,
-                     localtime(contact.created_on).strftime('%Y-%m-%d %H:%M'),
-                     enrollment.text])
+        data.append([contact.urns, contact.name, contact.points, contact.sms_maama_enrollment_date,
+                     contact.number_of_weeks])
 
     t = Table(data, colwidths, style=[('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                                       ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
@@ -245,13 +241,13 @@ def sms_maama_report():
     ptext = '<font size=12> <b> Weekly Enrolled Contacts</b></font>'
     report.append(Paragraph(ptext, styles["Normal"]))
     report.append(Spacer(1, 12))
-    contacts_titles = ['Phone Number', 'Enrolled On', 'Language']
+    contacts_titles = ['Phone Number', 'Created On', 'Enrolled On', 'Language']
     data = [contacts_titles]
-    colwidths = (150, 150, 150)
+    colwidths = (100, 120, 120, 100)
     for i, weekly_contact in enumerate(contacts):
         data.append(
             [weekly_contact.urns, localtime(weekly_contact.created_on).strftime("%Y-%m-%d %H:%M"),
-             weekly_contact.language])
+             weekly_contact.sms_maama_enrollment_date, weekly_contact.language])
     t = Table(data, colwidths, style=[('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                                       ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                                       ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
@@ -271,7 +267,8 @@ def sms_maama_report():
     report.append(Paragraph(ptext, styles["Normal"]))
     ptext = '<font size=12> <center>Total Messages Delivered: %s</center></font>' % read_messages_count
     report.append(Paragraph(ptext, styles["Normal"]))
-    ptext = '<font size=12> <center>Total Messages Hanging(No delivery receipt): %s</center></font>' % hanging_messages_count
+    ptext = '<font size=12> <center>Total Messages Hanging(No delivery receipt): %s</center></font>' \
+            % hanging_messages_count
     report.append(Paragraph(ptext, styles["Normal"]))
     ptext = '<font size=12> <center>Total Failed to Send Messages: %s</center></font>' % failed_messages_count
     report.append(Paragraph(ptext, styles["Normal"]))
@@ -327,7 +324,7 @@ def sms_maama_report():
     ptext = '<font size=12><b>Responses to Screening Questions</b></font>'
     report.append(Paragraph(ptext, styles["Normal"]))
     report.append(Spacer(1, 12))
-    flow_responsess_titles = ['Phone Number', 'Screening', 'Question Sent On', 'Response', 'Sent On']
+    flow_responsess_titles = ['Phone Number', 'Screening', 'Question Sent On', 'Response', 'Response Sent On']
     data = [flow_responsess_titles]
     colwidths = (100, 100, 100, 60, 100)
     for screening_response in screening_responses:
@@ -346,14 +343,18 @@ def sms_maama_report():
     ptext = '<font size=12><b>Responses to Antenatal Reminders</b></font>'
     report.append(Paragraph(ptext, styles["Normal"]))
     report.append(Spacer(1, 12))
-    antenatal_responses_titles = ['Phone Number', 'Appointment Reminder', 'Reminder Sent On', 'Response', 'Sent On']
+    antenatal_responses_titles = ['Phone Number', 'Appointment Reminder', 'Reminder Sent On', 'Response',
+                                  'Response Sent On']
     data = [antenatal_responses_titles]
     colwidths = (85, 130, 95, 55, 95)
     if antenatal_responses.count() >= 1:
         for antenatal_response in antenatal_responses:
             data.append(
-                        [antenatal_response.run.contact.urns, Paragraph(antenatal_response.run.flow.name, styles["BodyText"]), localtime(antenatal_response.run.created_on).strftime('%Y-%m-%d %H:%M'),
-                         Paragraph(antenatal_response.value, styles["BodyText"]), localtime(antenatal_response.time).strftime('%Y-%m-%d %H:%M')])
+                        [antenatal_response.run.contact.urns, Paragraph(antenatal_response.run.flow.name,
+                                                                        styles["BodyText"]),
+                         localtime(antenatal_response.run.created_on).strftime('%Y-%m-%d %H:%M'),
+                         Paragraph(antenatal_response.value, styles["BodyText"]),
+                         localtime(antenatal_response.time).strftime('%Y-%m-%d %H:%M')])
         t = Table(data, colwidths, style=[('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                                           ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                                           ('VALIGN', (0, 0), (-1, -1), 'TOP'),

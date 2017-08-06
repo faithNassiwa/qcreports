@@ -8,8 +8,8 @@ class EmailAdmin(admin.ModelAdmin):
 
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('id', 'uuid', 'name', 'language', 'urns', 'groups', 'points', 'number_of_weeks', 'blocked', 'stopped',
-                    'created_on', 'modified_on')
+    list_display = ('id', 'uuid', 'name', 'language', 'urns', 'groups', 'fields', 'points', 'number_of_weeks',
+                    'blocked', 'stopped', 'created_on', 'modified_on')
     list_filter = ('created_on', 'modified_on')
     search_fields = ['name', 'urns', 'groups']
 
